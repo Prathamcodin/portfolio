@@ -27,11 +27,11 @@ pnpm-debug.log*
 
 # unrelated projects that happen to live in this folder
 # (they have their own .git repos and .env files with secrets)
-hiver-clone-test/
-hiver-support-agent/
-data/
-.venv/
-venv/
+/hiver-clone-test/
+/hiver-support-agent/
+/data/
+/.venv/
+/venv/
 
 # python
 __pycache__/

@@ -1,6 +1,6 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://pratham-goyal.netlify.app',
+  site: 'https://prathamgoyal.me',
   compressHTML: true,
 });

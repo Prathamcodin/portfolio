@@ -1,0 +1,34 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Long-cache the built assets Astro emits with a content hash.
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Serve the resume with a friendlier filename when downloaded.
+[[headers]]
+  for = "/resume.pdf"
+  [headers.values]
+    Content-Disposition = "inline; filename=\"Pratham_Goyal_Resume.pdf\""
+
+# Security headers — cheap wins.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# Prefer the apex domain; www redirects to it.
+[[redirects]]
+  from = "https://www.prathamgoyal.me/*"
+  to = "https://prathamgoyal.me/:splat"
+  status = 301
+  force = true

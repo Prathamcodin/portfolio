@@ -1,0 +1,122 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Stats from '../components/Stats.astro';
+import Terminal from '../components/Terminal.astro';
+import { projects } from '../data/site';
+
+const featured = projects.slice(0, 3);
+---
+<Base>
+  <Hero />
+
+  <section id="featured" class="reveal">
+    <div class="eyebrow">Featured Work</div>
+    <h2 class="section-title">Recent projects</h2>
+    <div class="projects">
+      {featured.map((p, i) => (
+        <a href={`/projects#${p.slug}`} class="project-card">
+          <div class="top">
+            <span class="index">{String(i + 1).padStart(2, '0')} · {p.year}</span>
+            <span class={`status ${p.status.toLowerCase()}`}>{p.status}</span>
+          </div>
+          <h3>{p.title}</h3>
+          <p class="summary">{p.summary}</p>
+          <div class="tech">
+            {p.tech.slice(0, 4).map((t) => <span>{t}</span>)}
+          </div>
+        </a>
+      ))}
+    </div>
+    <div style="margin-top: 24px;">
+      <a href="/projects" class="btn ghost">View all projects →</a>
+    </div>
+  </section>
+
+  <Stats />
+
+  <section class="reveal">
+    <div class="eyebrow">Explore</div>
+    <h2 class="section-title">More on the site</h2>
+    <div class="explore-grid">
+      <a class="explore-card" href="/about">
+        <div class="ec-icon">◐</div>
+        <h3>About me</h3>
+        <p>Who I am, what I've studied, and how I like to build.</p>
+      </a>
+      <a class="explore-card" href="/credentials">
+        <div class="ec-icon">⌘</div>
+        <h3>Credentials</h3>
+        <p>NPTEL/IIT certifications with score rings and verify IDs.</p>
+      </a>
+      <a class="explore-card" href="/skills">
+        <div class="ec-icon">⚙</div>
+        <h3>Skills & Tech</h3>
+        <p>Languages, frameworks, DBs, tools — grouped and honest.</p>
+      </a>
+      <a class="explore-card" href="/notepad">
+        <div class="ec-icon">✎</div>
+        <h3>Doodle & Notes</h3>
+        <p>A sandbox on the site. Leave a sketch or a note (local).</p>
+      </a>
+      <a class="explore-card highlight" href="/chat">
+        <div class="ec-icon">◈</div>
+        <h3>Ask me anything</h3>
+        <p>An AI‑ish chatbot trained on my resume. Try it.</p>
+      </a>
+      <a class="explore-card" href="/contact">
+        <div class="ec-icon">✉</div>
+        <h3>Contact</h3>
+        <p>Email me, or find me on the socials.</p>
+      </a>
+    </div>
+  </section>
+
+  <Terminal />
+</Base>
+
+<style>
+  .explore-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  @media (max-width: 900px) { .explore-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .explore-grid { grid-template-columns: 1fr; } }
+
+  .explore-card {
+    padding: 20px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: inherit;
+    text-decoration: none;
+    transition: transform .2s ease, border-color .2s ease, background .2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .explore-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--border-strong);
+    background: var(--panel-hover);
+    color: inherit;
+  }
+  .explore-card.highlight {
+    border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 8%, transparent), transparent);
+  }
+  .explore-card .ec-icon {
+    width: 36px; height: 36px;
+    display: grid; place-items: center;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--accent) 15%, transparent);
+    color: var(--accent);
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
+  .explore-card h3 { margin: 0; font-size: 17px; letter-spacing: -0.01em; }
+  .explore-card p { margin: 0; color: var(--fg-muted); font-size: 13px; }
+
+  .project-card { text-decoration: none; color: inherit; }
+</style>

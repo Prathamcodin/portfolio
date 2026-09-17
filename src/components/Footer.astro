@@ -1,0 +1,8 @@
+---
+import { site } from '../data/site';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div>© {year} {site.name}. Built with Astro.</div>
+  <div>Crafted with <span class="heart">♥</span> in {site.location}.</div>
+</footer>

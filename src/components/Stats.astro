@@ -1,0 +1,21 @@
+---
+import { stats } from '../data/site';
+---
+<section id="stats" class="reveal">
+  <div class="eyebrow">By the numbers</div>
+  <h2 class="section-title">Impact & Practice</h2>
+  <div class="stats">
+    {stats.map((s) => {
+      const hasPlus = s.value.endsWith('+');
+      const num = hasPlus ? s.value.slice(0, -1) : s.value;
+      return (
+        <div class="stat">
+          <div class="num">
+            <span>{num}</span>{hasPlus && <span class="accent">+</span>}
+          </div>
+          <div class="label">{s.label}</div>
+        </div>
+      );
+    })}
+  </div>
+</section>

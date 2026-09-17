@@ -1,0 +1,403 @@
+---
+import { suggestedPrompts } from '../data/chatbot';
+---
+<section id="chat" class="reveal">
+  <div class="chat-wrap">
+    <div class="chat-header">
+      <div class="avatar-sm bot-av">PG</div>
+      <div>
+        <div class="chat-name">Ask Pratham (bot)</div>
+        <div class="chat-sub mono dim">
+          <span class="dot-g"></span> online · trained on his resume
+        </div>
+      </div>
+      <button id="chat-clear" class="clear-btn" type="button" aria-label="Clear chat">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+        </svg>
+        Clear
+      </button>
+    </div>
+
+    <div class="chat-body" id="chat-body" aria-live="polite">
+      <div class="row row-bot">
+        <div class="avatar-sm bot-av">PG</div>
+        <div class="bubble bot">
+          Hey! I'm a small chatbot that knows Pratham's resume front-to-back.<br>
+          Ask about his <b>projects</b>, <b>stack</b>, <b>DSA practice</b>, <b>certifications</b>, or how to <b>get in touch</b>.
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-suggestions" id="chat-suggestions">
+      {suggestedPrompts.map((p) => (
+        <button type="button" class="chip" data-prompt={p}>{p}</button>
+      ))}
+    </div>
+
+    <form class="chat-input" id="chat-form" autocomplete="off">
+      <input
+        id="chat-text"
+        type="text"
+        placeholder="Ask me anything about Pratham…"
+        aria-label="Message"
+        autocomplete="off"
+      />
+      <button type="submit" class="send" aria-label="Send">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4Z"/>
+        </svg>
+      </button>
+    </form>
+  </div>
+</section>
+
+<style>
+  .chat-wrap {
+    display: flex;
+    flex-direction: column;
+    height: min(72vh, 680px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--panel);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* Header */
+  .chat-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--panel);
+  }
+  .avatar-sm {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  .bot-av {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: var(--accent-ink);
+  }
+  .user-av {
+    background: var(--bg-2);
+    color: var(--fg-muted);
+    border: 1px solid var(--border);
+  }
+  .chat-name { font-weight: 600; font-size: 14px; }
+  .chat-sub { font-size: 11px; display: flex; align-items: center; gap: 6px; }
+  .chat-sub .dot-g {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 6px color-mix(in srgb, var(--accent) 80%, transparent);
+  }
+  .clear-btn {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--fg-muted);
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: transparent;
+    cursor: pointer;
+    transition: color .15s ease, border-color .15s ease, background .15s ease;
+  }
+  .clear-btn:hover {
+    color: var(--danger);
+    border-color: color-mix(in srgb, var(--danger) 50%, transparent);
+    background: color-mix(in srgb, var(--danger) 8%, transparent);
+  }
+
+  /* Body — grid: [avatar 36px] [bubble 1fr] [avatar 36px]  */
+  .chat-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background:
+      radial-gradient(600px 200px at 50% 0%, color-mix(in srgb, var(--accent) 6%, transparent), transparent 60%),
+      var(--bg-1);
+    scroll-behavior: smooth;
+  }
+
+  .row {
+    display: grid;
+    gap: 10px;
+    align-items: flex-end;
+    animation: pop-in .3s cubic-bezier(.2,.7,.2,1);
+  }
+  @keyframes pop-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Bot rows: avatar on the LEFT, bubble takes middle */
+  .row-bot {
+    grid-template-columns: 36px 1fr 36px;
+    justify-items: start;
+  }
+  .row-bot .bubble { grid-column: 2; margin-right: auto; }
+  .row-bot .avatar-sm { grid-column: 1; }
+
+  /* User rows: avatar on the RIGHT, bubble takes middle */
+  .row-user {
+    grid-template-columns: 36px 1fr 36px;
+    justify-items: end;
+  }
+  .row-user .bubble { grid-column: 2; margin-left: auto; }
+  .row-user .avatar-sm { grid-column: 3; }
+
+  .bubble {
+    max-width: 100%;
+    padding: 12px 16px;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 1.6;
+    word-wrap: break-word;
+    position: relative;
+  }
+  .bubble.bot {
+    background: var(--panel-hover);
+    color: var(--fg);
+    border: 1px solid var(--border);
+    border-bottom-left-radius: 4px;
+  }
+  .bubble.user {
+    background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 80%, white));
+    color: var(--accent-ink);
+    border: 1px solid transparent;
+    border-bottom-right-radius: 4px;
+    box-shadow: 0 4px 14px -6px color-mix(in srgb, var(--accent) 40%, transparent);
+  }
+  .bubble.bot a { color: var(--accent-2); text-decoration: underline; }
+  .bubble.user a { color: var(--accent-ink); text-decoration: underline; }
+  .bubble.bot b, .bubble.bot strong { color: var(--accent); font-weight: 600; }
+  .bubble.user b, .bubble.user strong { color: var(--accent-ink); font-weight: 700; }
+  .bubble code {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--fg) 8%, transparent);
+  }
+
+  /* Typing indicator */
+  .typing { display: inline-flex; gap: 4px; padding: 4px 0; align-items: center; }
+  .typing span {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--fg-muted);
+    animation: bob 1.2s ease-in-out infinite;
+  }
+  .typing span:nth-child(2) { animation-delay: .15s; }
+  .typing span:nth-child(3) { animation-delay: .3s; }
+  @keyframes bob {
+    0%, 60%, 100% { transform: translateY(0); opacity: .5; }
+    30% { transform: translateY(-4px); opacity: 1; }
+  }
+
+  /* Suggestions */
+  .chat-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 12px 16px 4px;
+    border-top: 1px solid var(--border);
+    background: var(--panel);
+  }
+  .chip {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--fg-muted);
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: transparent;
+    cursor: pointer;
+    transition: color .15s ease, border-color .15s ease, background .15s ease;
+  }
+  .chip:hover {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+  }
+
+  /* Input row */
+  .chat-input {
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px 14px;
+    background: var(--panel);
+  }
+  .chat-input input {
+    flex: 1;
+    padding: 12px 16px;
+    background: var(--bg-2);
+    color: var(--fg);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    outline: none;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .chat-input input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
+  }
+  .chat-input .send {
+    display: grid; place-items: center;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-ink);
+    cursor: pointer;
+    border: none;
+    transition: transform .12s ease, background .15s ease;
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--accent) 50%, transparent);
+  }
+  .chat-input .send:hover {
+    background: color-mix(in srgb, var(--accent) 85%, white);
+    transform: scale(1.05);
+  }
+  .chat-input .send:active { transform: scale(0.96); }
+
+  /* Compact on mobile */
+  @media (max-width: 600px) {
+    .chat-body { padding: 14px; }
+    .row-bot, .row-user { grid-template-columns: 28px 1fr 28px; gap: 8px; }
+    .avatar-sm { width: 28px; height: 28px; font-size: 11px; }
+    .bubble { padding: 10px 14px; font-size: 13px; }
+  }
+</style>
+
+<script>
+  import { findAnswer } from '../data/chatbot';
+
+  const body = document.getElementById('chat-body');
+  const form = document.getElementById('chat-form');
+  const input = document.getElementById('chat-text');
+  const clearBtn = document.getElementById('chat-clear');
+  const chips = document.querySelectorAll('.chat-suggestions .chip');
+  const CHAT_KEY = 'pg_chat_history';
+
+  type Msg = { who: 'user' | 'bot'; text: string };
+  const state: { history: Msg[] } = { history: [] };
+
+  function esc(s: string) {
+    return s.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c] as string));
+  }
+
+  function formatMarkdown(s: string) {
+    let out = esc(s);
+    out = out.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    out = out.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>');
+    out = out.replace(/`([^`]+)`/g, '<code>$1</code>');
+    out = out.replace(/\n/g, '<br>');
+    return out;
+  }
+
+  function scrollBottom() {
+    if (body) body.scrollTop = body.scrollHeight;
+  }
+
+  function buildRow(who: 'user' | 'bot', innerHTML: string) {
+    const row = document.createElement('div');
+    row.className = `row row-${who}`;
+    const avatar = document.createElement('div');
+    avatar.className = `avatar-sm ${who === 'bot' ? 'bot-av' : 'user-av'}`;
+    avatar.textContent = who === 'bot' ? 'PG' : 'YOU';
+    const bubble = document.createElement('div');
+    bubble.className = `bubble ${who}`;
+    bubble.innerHTML = innerHTML;
+    row.appendChild(avatar);
+    row.appendChild(bubble);
+    return row;
+  }
+
+  function addMessage(who: 'user' | 'bot', text: string, save = true) {
+    if (!body) return;
+    body.appendChild(buildRow(who, formatMarkdown(text)));
+    scrollBottom();
+    if (save) {
+      state.history.push({ who, text });
+      try { localStorage.setItem(CHAT_KEY, JSON.stringify(state.history)); } catch {}
+    }
+  }
+
+  function addTyping() {
+    if (!body) return null;
+    const row = buildRow('bot', '<div class="typing"><span></span><span></span><span></span></div>');
+    row.id = 'typing-indicator';
+    body.appendChild(row);
+    scrollBottom();
+    return row;
+  }
+
+  function removeTyping() {
+    document.getElementById('typing-indicator')?.remove();
+  }
+
+  async function respond(userText: string) {
+    addMessage('user', userText);
+    addTyping();
+    const answer = findAnswer(userText);
+    const delay = 400 + Math.min(700, userText.length * 20);
+    await new Promise((r) => setTimeout(r, delay));
+    removeTyping();
+    addMessage('bot', answer);
+  }
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const el = input as HTMLInputElement | null;
+    if (!el) return;
+    const v = el.value.trim();
+    if (!v) return;
+    el.value = '';
+    respond(v);
+  });
+
+  chips.forEach((c) => c.addEventListener('click', () => {
+    const p = c.getAttribute('data-prompt') || '';
+    if (p) respond(p);
+  }));
+
+  // Clear: rebuild body from scratch with just the greeting (no confirm dialog).
+  clearBtn?.addEventListener('click', () => {
+    if (!body) return;
+    body.innerHTML = '';
+    const greeting = buildRow(
+      'bot',
+      "Hey! I'm a small chatbot that knows Pratham's resume front-to-back.<br>Ask about his <b>projects</b>, <b>stack</b>, <b>DSA practice</b>, <b>certifications</b>, or how to <b>get in touch</b>."
+    );
+    body.appendChild(greeting);
+    state.history = [];
+    try { localStorage.removeItem(CHAT_KEY); } catch {}
+    (input as HTMLInputElement | null)?.focus?.();
+  });
+
+  // Restore history
+  try {
+    const saved = localStorage.getItem(CHAT_KEY);
+    if (saved) {
+      const arr = JSON.parse(saved) as Msg[];
+      for (const m of arr) addMessage(m.who, m.text, false);
+      state.history = arr;
+    }
+  } catch {}
+
+  (input as HTMLInputElement | null)?.focus?.();
+</script>

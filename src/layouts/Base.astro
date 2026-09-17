@@ -1,0 +1,101 @@
+---
+import '../styles/global.css';
+import Sidebar from '../components/Sidebar.astro';
+import TopNav from '../components/TopNav.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = `${site.name} — ${site.role}`,
+  description = site.tagline,
+} = Astro.props;
+---
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0a0a0b" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+    <script is:inline>
+      // No-flash theme boot (runs before styles apply)
+      (function () {
+        try {
+          const saved = localStorage.getItem('pg_theme');
+          const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+          const theme = saved || (prefersLight ? 'light' : 'dark');
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="shell">
+      <Sidebar />
+      <div class="container">
+        <TopNav />
+        <slot />
+        <Footer />
+      </div>
+    </div>
+
+    <!-- Global toast (used by copy buttons anywhere on the site) -->
+    <div class="toast global-toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+    <style is:global>
+      .global-toast {
+        position: fixed;
+        left: 50%;
+        bottom: 32px;
+        transform: translateX(-50%) translateY(20px);
+        padding: 12px 18px;
+        background: var(--fg);
+        color: var(--bg);
+        border-radius: 999px;
+        font-family: var(--font-mono);
+        font-size: 13px;
+        opacity: 0;
+        pointer-events: none;
+        box-shadow: var(--shadow-lg);
+        transition: opacity .2s ease, transform .2s ease;
+        z-index: 100;
+        max-width: 90vw;
+        text-align: center;
+      }
+      .global-toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    </style>
+
+    <script>
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              e.target.classList.add('visible');
+              io.unobserve(e.target);
+            }
+          }
+        },
+        { threshold: 0.12 }
+      );
+      document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>

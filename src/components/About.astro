@@ -1,0 +1,56 @@
+---
+import { site, education, achievements } from '../data/site';
+---
+<section id="about" class="reveal">
+  <div class="eyebrow">About</div>
+  <h2 class="section-title">Who I am</h2>
+
+  <div class="grid-2">
+    <div class="panel">
+      <h3>Backend systems, with a builder's bias</h3>
+      <p>
+        I'm a 3rd‑year B.Tech ECE student at SGSITS Indore, graduating in 2027 and
+        aiming at SDE Intern roles. I spend most days shipping —
+        distributed backend systems in <span class="mono">Java + Spring Boot</span>,
+        AI-adjacent pipelines in <span class="mono">Python + FastAPI</span>, and
+        a real production client site.
+      </p>
+      <p>
+        Strong CS fundamentals — DSA, OOD, complexity analysis — with 700+ problems
+        solved. Codeforces Div. 2 global rank 501 on Round 1115. I care about systems
+        that actually hold up under load: reliable job pipelines, atomic invariants,
+        and code that a race condition can't sneak past.
+      </p>
+    </div>
+
+    <div class="panel">
+      <h3>Education</h3>
+      {education.map((e) => (
+        <div style="margin-bottom: 12px;">
+          <div style="font-weight: 600;">{e.school}</div>
+          <div class="muted" style="font-size: 14px;">{e.degree}</div>
+          <div class="dim mono" style="font-size: 12px; margin-top: 4px;">{e.period} · {e.location}</div>
+          {e.coursework && (
+            <div style="margin-top: 10px;">
+              <div class="mono" style="font-size: 11px; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;">Relevant Coursework</div>
+              <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                {e.coursework.map((c) => (
+                  <span style="font-family: var(--font-mono); font-size: 11px; padding: 4px 8px; border: 1px solid var(--border); border-radius: 6px; color: var(--fg-muted); background: var(--panel);">{c}</span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      ))}
+
+      <h3 style="margin-top: 20px;">Achievements</h3>
+      <ul style="margin: 0; padding-left: 18px;">
+        {achievements.map((a) => (
+          <li style="margin-bottom: 6px; color: var(--fg-muted); font-size: 14px;">
+            <strong style="color: var(--fg);">{a.title}</strong> — <span class="dim">{a.detail}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>

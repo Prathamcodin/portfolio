@@ -1,0 +1,18 @@
+---
+import { skills } from '../data/site';
+const groups = Object.entries(skills);
+---
+<section id="skills" class="reveal">
+  <div class="eyebrow">Toolkit</div>
+  <h2 class="section-title">Skills & Tech</h2>
+  <div class="panel">
+    {groups.map(([name, items]) => (
+      <div class="skill-group">
+        <h4>{name}</h4>
+        <div class="chips">
+          {items.map((s: string) => <span>{s}</span>)}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>

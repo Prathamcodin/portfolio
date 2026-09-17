@@ -1,0 +1,28 @@
+---
+import { projects } from '../data/site';
+---
+<section id="projects" class="reveal">
+  <div class="eyebrow">Featured Work</div>
+  <h2 class="section-title">Selected Projects</h2>
+  <div class="projects">
+    {projects.map((p, i) => (
+      <article class="project-card">
+        <div class="top">
+          <span class="index">{String(i + 1).padStart(2, '0')} · {p.year}</span>
+          <span class={`status ${p.status.toLowerCase()}`}>{p.status}</span>
+        </div>
+        <h3>{p.title}</h3>
+        <p class="summary">{p.summary}</p>
+        <p class="desc">{p.description}</p>
+        <div class="tech">
+          {p.tech.map((t) => <span>{t}</span>)}
+        </div>
+        <div class="actions">
+          {p.links.map((l) => (
+            <a href={l.href} target="_blank" rel="noreferrer">{l.label} ↗</a>
+          ))}
+        </div>
+      </article>
+    ))}
+  </div>
+</section>

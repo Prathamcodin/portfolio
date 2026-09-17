@@ -1,0 +1,13 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import Chatbot from '../components/Chatbot.astro';
+---
+<Base title="Chat — Pratham Goyal" description="Ask me anything about Pratham — a small chatbot trained on his resume.">
+  <PageHead
+    eyebrow="/ chat"
+    title="Ask me anything."
+    subtitle="A small chatbot that knows Pratham's resume front-to-back. No LLM, no data leaving your browser — just fast keyword answers."
+  />
+  <Chatbot />
+</Base>

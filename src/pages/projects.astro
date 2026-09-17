@@ -1,0 +1,34 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import { projects } from '../data/site';
+---
+<Base title="Projects — Pratham Goyal">
+  <PageHead
+    eyebrow="/ projects"
+    title="Things I've built."
+    subtitle="Real production systems and side projects. Every one has a link — code, live, or both."
+  />
+
+  <div class="projects">
+    {projects.map((p, i) => (
+      <article class="project-card" id={p.slug}>
+        <div class="top">
+          <span class="index">{String(i + 1).padStart(2, '0')} · {p.year}</span>
+          <span class={`status ${p.status.toLowerCase()}`}>{p.status}</span>
+        </div>
+        <h3>{p.title}</h3>
+        <p class="summary">{p.summary}</p>
+        <p class="desc">{p.description}</p>
+        <div class="tech">
+          {p.tech.map((t) => <span>{t}</span>)}
+        </div>
+        <div class="actions">
+          {p.links.map((l) => (
+            <a href={l.href} target="_blank" rel="noreferrer">{l.label} ↗</a>
+          ))}
+        </div>
+      </article>
+    ))}
+  </div>
+</Base>

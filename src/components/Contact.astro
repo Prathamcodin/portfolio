@@ -1,0 +1,196 @@
+---
+import { site } from '../data/site';
+---
+<section id="contact" class="reveal">
+  <div class="contact">
+    <div class="eyebrow" style="justify-content: center;">Get in touch</div>
+    <h2>Want to <span class="accent">connect?</span></h2>
+    <p>
+      Open to internships, freelance builds, and interesting collaborations.
+      Ping me over email or the socials — I usually reply the same day.
+    </p>
+
+    <div class="email-card">
+      <div class="email-label mono dim">EMAIL</div>
+      <div class="email-row">
+        <a class="email-text" href={`mailto:${site.email}`} id="email-link">{site.email}</a>
+        <button type="button" class="copy-btn" id="copy-email" aria-label="Copy email to clipboard">
+          <svg class="ic-copy" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+          <svg class="ic-check" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          <span class="copy-label">Copy</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="cta-row" style="justify-content: center; margin-top: 24px;">
+      <a class="btn primary" href={`mailto:${site.email}`} id="mailto-btn">Send email ↗</a>
+      <a class="btn ghost" href={site.socials.github} target="_blank" rel="noreferrer">GitHub ↗</a>
+      <a class="btn ghost" href={site.socials.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a>
+    </div>
+
+    <div class="alt-contact">
+      <div class="alt-item">
+        <span class="mono dim">phone</span>
+        <a href={`tel:${site.phone.replace(/\s+/g, '')}`}>{site.phone}</a>
+      </div>
+      <div class="alt-item">
+        <span class="mono dim">location</span>
+        <span>{site.location}</span>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<style>
+  .email-card {
+    max-width: 520px;
+    margin: 30px auto 0;
+    padding: 18px 20px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-align: left;
+  }
+  .email-label {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .email-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .email-text {
+    flex: 1;
+    font-family: var(--font-mono);
+    font-size: 15px;
+    color: var(--fg);
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .email-text:hover { color: var(--accent); }
+  .copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--fg-muted);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: transparent;
+    cursor: pointer;
+    transition: color .15s ease, border-color .15s ease, background .15s ease;
+    flex-shrink: 0;
+  }
+  .copy-btn:hover {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+  }
+  .copy-btn.copied {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 60%, transparent);
+    background: color-mix(in srgb, var(--accent) 15%, transparent);
+  }
+  .copy-btn .ic-check { display: none; }
+  .copy-btn.copied .ic-copy { display: none; }
+  .copy-btn.copied .ic-check { display: block; }
+
+  .alt-contact {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 28px;
+    color: var(--fg-muted);
+    font-size: 14px;
+  }
+  .alt-item { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .alt-item .mono { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .alt-item a { color: var(--fg); text-decoration: none; }
+  .alt-item a:hover { color: var(--accent); }
+</style>
+
+<script define:vars={{ email: site.email }}>
+  function init() {
+  const toast = document.getElementById('toast');
+  const copyBtn = document.getElementById('copy-email');
+  const emailLink = document.getElementById('email-link');
+  const mailtoBtn = document.getElementById('mailto-btn');
+
+  let toastTimer;
+  function showToast(msg) {
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
+  }
+
+  async function copyEmail() {
+    let ok = false;
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(email);
+        ok = true;
+      } else {
+        // Fallback for older browsers / non-secure context
+        const ta = document.createElement('textarea');
+        ta.value = email;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    } catch { ok = false; }
+
+    if (ok) {
+      copyBtn?.classList.add('copied');
+      const label = copyBtn?.querySelector('.copy-label');
+      if (label) label.textContent = 'Copied';
+      showToast(`Email copied — ${email}`);
+      setTimeout(() => {
+        copyBtn?.classList.remove('copied');
+        if (label) label.textContent = 'Copy';
+      }, 2200);
+    } else {
+      showToast(email);
+    }
+  }
+
+  copyBtn?.addEventListener('click', copyEmail);
+
+  // Clicking the email row copies too (and lets the mailto go through)
+  emailLink?.addEventListener('click', (e) => {
+    // Always copy; don't prevent default so mailto still tries
+    copyEmail();
+  });
+
+  // For the "Send email" button — if the browser has no mail client, the click
+  // does nothing visible. Copy in parallel and show a toast so the user always
+  // has the address in their clipboard.
+  mailtoBtn?.addEventListener('click', () => {
+    copyEmail();
+  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+</script>

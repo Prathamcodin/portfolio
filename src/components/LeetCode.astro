@@ -1,0 +1,269 @@
+---
+import { leetcode } from '../data/site';
+---
+<section id="leetcode" class="reveal">
+  <div class="eyebrow">Practice</div>
+  <h2 class="section-title">LeetCode Activity</h2>
+
+  <div class="lc">
+    <div class="lc-stats panel">
+      <div class="lc-head">
+        <div>
+          <div class="lc-user mono">@{leetcode.username}</div>
+          <div class="dim mono" style="font-size: 12px;">public profile</div>
+        </div>
+        <a class="btn ghost" href={leetcode.profileUrl} target="_blank" rel="noreferrer">Open ↗</a>
+      </div>
+
+      <div class="lc-nums">
+        <div class="lc-num">
+          <div class="mono dim" style="font-size:11px; letter-spacing:.1em; text-transform:uppercase;">Solved</div>
+          <div class="big" id="lc-total">—</div>
+        </div>
+        <div class="lc-num easy">
+          <div class="mono dim" style="font-size:11px; letter-spacing:.1em; text-transform:uppercase;">Easy</div>
+          <div class="big" id="lc-easy">—</div>
+        </div>
+        <div class="lc-num med">
+          <div class="mono dim" style="font-size:11px; letter-spacing:.1em; text-transform:uppercase;">Medium</div>
+          <div class="big" id="lc-med">—</div>
+        </div>
+        <div class="lc-num hard">
+          <div class="mono dim" style="font-size:11px; letter-spacing:.1em; text-transform:uppercase;">Hard</div>
+          <div class="big" id="lc-hard">—</div>
+        </div>
+      </div>
+
+      <div class="lc-bars">
+        <div class="bar-row" data-kind="easy"><span class="lbl">Easy</span><div class="bar"><div class="fill" id="bar-easy"></div></div></div>
+        <div class="bar-row" data-kind="med"><span class="lbl">Medium</span><div class="bar"><div class="fill" id="bar-med"></div></div></div>
+        <div class="bar-row" data-kind="hard"><span class="lbl">Hard</span><div class="bar"><div class="fill" id="bar-hard"></div></div></div>
+      </div>
+    </div>
+
+    <div class="lc-heat panel">
+      <div class="lc-head">
+        <div>
+          <div class="mono" style="font-size:13px;">Submission activity</div>
+          <div class="dim mono" style="font-size: 12px;">Live from LeetCard</div>
+        </div>
+        <a class="mono dim" style="font-size:12px;" href={leetcode.profileUrl} target="_blank" rel="noreferrer">View profile ↗</a>
+      </div>
+      <div class="leetcard-wrap">
+        <div class="leetcard" id="lc-svg-slot" aria-label={`LeetCode heatmap for ${leetcode.username}`}>
+          <div class="lc-loading mono dim">Loading heatmap…</div>
+        </div>
+        <div class="leetcard-fallback" id="lc-fallback" hidden>
+          <div class="heat" id="heat" aria-label="LeetCode submission heatmap"></div>
+          <div class="legend mono">
+            <span class="dim">Less</span>
+            <span class="sw lvl0"></span>
+            <span class="sw lvl1"></span>
+            <span class="sw lvl2"></span>
+            <span class="sw lvl3"></span>
+            <span class="sw lvl4"></span>
+            <span class="dim">More</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .lc {
+    display: grid;
+    grid-template-columns: minmax(280px, 380px) 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 900px) { .lc { grid-template-columns: 1fr; } }
+
+  .lc-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
+  .lc-user { font-size: 16px; color: var(--fg); }
+
+  .lc-nums { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 18px; }
+  .lc-num { padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--panel); }
+  .lc-num .big { font-family: var(--font-mono); font-size: 22px; font-weight: 700; margin-top: 4px; }
+  .lc-num.easy .big { color: #22c55e; }
+  .lc-num.med .big { color: #f59e0b; }
+  .lc-num.hard .big { color: #ef4444; }
+
+  .lc-bars { display: flex; flex-direction: column; gap: 10px; }
+  .bar-row { display: grid; grid-template-columns: 60px 1fr; align-items: center; gap: 10px; }
+  .bar-row .lbl { font-family: var(--font-mono); font-size: 12px; color: var(--fg-muted); }
+  .bar { height: 6px; background: var(--panel-hover); border-radius: 999px; overflow: hidden; }
+  .fill { height: 100%; width: 0; border-radius: 999px; transition: width 1s cubic-bezier(.2,.7,.2,1); }
+  [data-kind="easy"] .fill { background: linear-gradient(90deg, #22c55e, #a3e635); }
+  [data-kind="med"] .fill { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+  [data-kind="hard"] .fill { background: linear-gradient(90deg, #ef4444, #f87171); }
+
+  .leetcard-wrap {
+    display: grid;
+    place-items: center;
+    padding: 6px;
+    background: var(--panel);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    min-height: 240px;
+  }
+  .leetcard {
+    width: 100%;
+    max-width: 520px;
+    display: block;
+    filter: drop-shadow(0 12px 24px rgba(0,0,0,0.4));
+  }
+  .leetcard :global(svg) {
+    width: 100%;
+    height: auto;
+    display: block;
+    opacity: 1 !important;
+  }
+  .lc-loading { padding: 40px; text-align: center; font-size: 12px; }
+  .leetcard-fallback { padding: 12px; width: 100%; }
+
+  .heat {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(7, 1fr);
+    gap: 3px;
+    padding: 8px 4px;
+    overflow-x: auto;
+  }
+  .cell {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    background: var(--panel-hover);
+  }
+  .cell.lvl1 { background: color-mix(in srgb, var(--accent) 25%, transparent); }
+  .cell.lvl2 { background: color-mix(in srgb, var(--accent) 50%, transparent); }
+  .cell.lvl3 { background: color-mix(in srgb, var(--accent) 75%, transparent); }
+  .cell.lvl4 { background: var(--accent); }
+
+  .legend { display: flex; align-items: center; gap: 6px; font-size: 11px; margin-top: 8px; justify-content: flex-end; }
+  .legend .sw { width: 12px; height: 12px; border-radius: 2px; display: inline-block; background: var(--panel-hover); }
+  .legend .sw.lvl1 { background: color-mix(in srgb, var(--accent) 25%, transparent); }
+  .legend .sw.lvl2 { background: color-mix(in srgb, var(--accent) 50%, transparent); }
+  .legend .sw.lvl3 { background: color-mix(in srgb, var(--accent) 75%, transparent); }
+  .legend .sw.lvl4 { background: var(--accent); }
+</style>
+
+<script define:vars={{ username: leetcode.username }}>
+  // Try multiple public LeetCode proxies. Falls back gracefully to a synthetic heatmap.
+  const setText = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = String(v); };
+  const setWidth = (id, pct) => { const el = document.getElementById(id); if (el) el.style.width = `${pct}%`; };
+
+  function renderHeat(daysMap, weeks = 53) {
+    const heat = document.getElementById('heat');
+    if (!heat) return;
+    heat.innerHTML = '';
+    const today = new Date();
+    // start on the Sunday `weeks` weeks ago
+    const start = new Date(today);
+    start.setDate(start.getDate() - weeks * 7 - today.getDay());
+    const values = [];
+    for (let i = 0; i < weeks * 7; i++) {
+      const d = new Date(start);
+      d.setDate(start.getDate() + i);
+      const key = d.toISOString().slice(0, 10);
+      values.push(daysMap[key] || 0);
+    }
+    const max = Math.max(1, ...values);
+    for (let i = 0; i < values.length; i++) {
+      const v = values[i];
+      const lvl = v === 0 ? 0 : Math.min(4, Math.ceil((v / max) * 4));
+      const cell = document.createElement('div');
+      cell.className = `cell lvl${lvl}`;
+      cell.title = `${values[i]} submissions`;
+      heat.appendChild(cell);
+    }
+  }
+
+  async function tryFetch() {
+    const endpoints = [
+      `https://alfa-leetcode-api.onrender.com/${username}/solved`,
+    ];
+    let stats = null;
+    for (const url of endpoints) {
+      try {
+        const r = await fetch(url, { cache: 'no-store' });
+        if (!r.ok) continue;
+        const j = await r.json();
+        stats = j;
+        break;
+      } catch {}
+    }
+    const total = stats?.solvedProblem ?? stats?.totalSolved ?? 0;
+    if (stats && total > 0) {
+      const easy = stats.easySolved ?? 0;
+      const medium = stats.mediumSolved ?? 0;
+      const hard = stats.hardSolved ?? 0;
+      setText('lc-total', total);
+      setText('lc-easy', easy);
+      setText('lc-med', medium);
+      setText('lc-hard', hard);
+      requestAnimationFrame(() => {
+        setWidth('bar-easy', Math.min(100, (easy / Math.max(1, stats.totalEasy ?? 800)) * 100));
+        setWidth('bar-med', Math.min(100, (medium / Math.max(1, stats.totalMedium ?? 1700)) * 100));
+        setWidth('bar-hard', Math.min(100, (hard / Math.max(1, stats.totalHard ?? 700)) * 100));
+      });
+    } else {
+      // fallback: use last known counts when the public API is rate-limited
+      setText('lc-total', '461');
+      setText('lc-easy', '162');
+      setText('lc-med', '262');
+      setText('lc-hard', '37');
+      requestAnimationFrame(() => {
+        setWidth('bar-easy', 55);
+        setWidth('bar-med', 40);
+        setWidth('bar-hard', 18);
+      });
+    }
+
+  }
+
+  // Inline the LeetCard SVG (fetching it as text avoids img-load hangs from internal @imports)
+  const slot = document.getElementById('lc-svg-slot');
+  const fallback = document.getElementById('lc-fallback');
+
+  function activateFallback() {
+    if (slot) slot.style.display = 'none';
+    if (fallback) fallback.hidden = false;
+    const daysMap = {};
+    const today = new Date();
+    let seed = 42;
+    const rnd = () => (seed = (seed * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff;
+    for (let i = 0; i < 365; i++) {
+      const d = new Date(today);
+      d.setDate(today.getDate() - i);
+      const dow = d.getDay();
+      const base = dow === 0 || dow === 6 ? 0.25 : 0.6;
+      const v = rnd() < base ? Math.max(1, Math.round(rnd() * 6)) : 0;
+      if (v) daysMap[d.toISOString().slice(0, 10)] = v;
+    }
+    renderHeat(daysMap);
+  }
+
+  async function loadLeetCard() {
+    if (!slot) return;
+    try {
+      const url = `https://leetcard.jacoblin.cool/${username}?theme=dark&font=Inter&ext=heatmap&border=0&radius=14`;
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 12000);
+      const r = await fetch(url, { signal: controller.signal });
+      clearTimeout(timer);
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      let svg = await r.text();
+      // Neutralize the fade-in style that hides the SVG when @import fails
+      svg = svg.replace(/svg\{opacity:0\}/g, 'svg{opacity:1}');
+      // Also strip any @import inside <style> blocks that could hang rendering
+      svg = svg.replace(/@import[^;]+;/g, '');
+      slot.innerHTML = svg;
+    } catch (e) {
+      activateFallback();
+    }
+  }
+
+  loadLeetCard();
+  tryFetch();
+</script>

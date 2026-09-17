@@ -1,0 +1,18 @@
+---
+import { experience } from '../data/site';
+---
+<section id="experience" class="reveal">
+  <div class="eyebrow">Experience</div>
+  <h2 class="section-title">Where I've worked</h2>
+  <div class="timeline">
+    {experience.map((e) => (
+      <div class="item">
+        <h4>{e.role} · <span class="muted">{e.company}</span></h4>
+        <div class="meta">{e.period} · {e.location}</div>
+        <ul>
+          {e.bullets.map((b) => <li>{b}</li>)}
+        </ul>
+      </div>
+    ))}
+  </div>
+</section>

@@ -1,0 +1,63 @@
+---
+import { site } from '../data/site';
+---
+<section id="terminal" class="reveal">
+  <div class="eyebrow">whoami</div>
+  <h2 class="section-title">A quick shell</h2>
+
+  <div class="terminal" role="region" aria-label="Interactive terminal">
+    <div class="tbar">
+      <span class="dot r"></span>
+      <span class="dot y"></span>
+      <span class="dot g"></span>
+      <span class="title">pratham@portfolio:~ — zsh</span>
+    </div>
+    <div class="body" id="term-body">
+      <div><span class="prompt">➜</span> <span class="cmd">whoami</span></div>
+      <div class="out">{site.name} — {site.role}</div>
+      <div><span class="prompt">➜</span> <span class="cmd">cat location.txt</span></div>
+      <div class="out">{site.location}</div>
+      <div><span class="prompt">➜</span> <span class="cmd">ls skills/</span></div>
+      <div class="out">c++/ python/ typescript/ react/ nextjs/ fastapi/ mongodb/ docker/</div>
+      <div><span class="prompt">➜</span> <span class="cmd">./contact --email</span></div>
+      <div class="out">
+        <a class="link" href={site.socials.email}>{site.email}</a>
+      </div>
+      <div><span class="prompt">➜</span> <span id="typed" class="cmd"></span><span class="cursor" aria-hidden="true"></span></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const lines = [
+    'echo "let\'s build something."',
+    'git status',
+    'npm run deploy',
+    'open https://github.com',
+  ];
+  const el = document.getElementById('typed');
+  if (el) {
+    let line = 0;
+    let i = 0;
+    let deleting = false;
+    const tick = () => {
+      const current = lines[line];
+      if (!deleting) {
+        el.textContent = current.slice(0, ++i);
+        if (i === current.length) {
+          deleting = true;
+          setTimeout(tick, 1400);
+          return;
+        }
+      } else {
+        el.textContent = current.slice(0, --i);
+        if (i === 0) {
+          deleting = false;
+          line = (line + 1) % lines.length;
+        }
+      }
+      setTimeout(tick, deleting ? 30 : 60);
+    };
+    tick();
+  }
+</script>

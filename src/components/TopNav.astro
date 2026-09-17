@@ -1,0 +1,50 @@
+---
+import { site } from '../data/site';
+
+const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => {
+  if (href === '/') return pathname === '/';
+  return pathname === href || pathname.startsWith(href + '/');
+};
+
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/skills', label: 'Skills' },
+  { href: '/credentials', label: 'Credentials' },
+  { href: '/notepad', label: 'Notepad' },
+  { href: '/chat', label: 'Chat' },
+];
+---
+<header class="topnav">
+  <a href="/" class="brand">
+    <span>{'>'}</span> {site.name.toLowerCase().replace(' ', '_')}<span>_</span>
+  </a>
+  <nav class="links" aria-label="Sections">
+    {links.map((l) => (
+      <a href={l.href} class:list={[{ active: isActive(l.href) }]}>{l.label}</a>
+    ))}
+    <a href="/contact" class:list={['cta', { active: isActive('/contact') }]}>Contact</a>
+  </nav>
+</header>
+
+<style>
+  .topnav .brand { text-decoration: none; }
+  .topnav .links a.active {
+    color: var(--fg);
+    position: relative;
+  }
+  .topnav .links a:not(.cta).active::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: -6px;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+  .topnav .links a.cta.active {
+    background: color-mix(in srgb, var(--accent) 15%, transparent);
+    color: var(--accent);
+  }
+</style>

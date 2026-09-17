@@ -1,0 +1,20 @@
+---
+import { site } from '../data/site';
+---
+<section class="hero" id="top">
+  <div class="pill" style="margin-bottom: 18px;">
+    <span class="dot-g"></span>
+    <span>Open to opportunities & collaborations</span>
+  </div>
+  <div class="hello">Hello! I'm</div>
+  <h1>{site.name}</h1>
+  <p class="role">
+    <em>Backend</em> & <span class="cyan">SDE</span> — Java, Spring Boot, Python.
+  </p>
+  <p class="tagline">{site.tagline}</p>
+  <div class="cta-row">
+    <a class="btn primary" href="/projects">View Projects →</a>
+    <a class="btn ghost" href={site.resumeUrl} target="_blank" rel="noreferrer">Resume ↗</a>
+    <a class="btn ghost" href="/contact">Get in touch</a>
+  </div>
+</section>
